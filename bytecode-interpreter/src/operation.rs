@@ -4,12 +4,14 @@ use crate::errors::BytecodeError::OperationParsingError;
 #[derive(Debug, Clone)]
 pub enum Operation {
     LoadVal(i32),
-    WriteVar(String),
+    Loop(u32),
     ReadVar(String),
+    WriteVar(String),
     Add,
     Subtract,
     Multiply,
     Divide,
+    EndLoop,
     ReturnValue
 }
 
@@ -23,11 +25,13 @@ impl Operation {
                     "SUBTRACT" => Ok(Operation::Subtract),
                     "MULTIPLY" => Ok(Operation::Multiply),
                     "DIVIDE" => Ok(Operation::Divide),
+                    "END_LOOP" => Ok(Operation::EndLoop),
                     "RETURN_VALUE" => Ok(Operation::ReturnValue),
                     _ => Err(OperationParsingError("Unknown operation provided".to_string()))
                 },
             2 => match op_split[0] {
                     "LOAD_VAL" => Self::parse_load_op(&op_split),
+                    "LOOP" => Self::parse_loop_op(&op_split),
                     "WRITE_VAR" => Ok(Operation::WriteVar(op_split[1].to_string())),
                     "READ_VAR" => Ok(Operation::ReadVar(op_split[1].to_string())),
                     _ => Err(OperationParsingError("Unknown operation provided".to_string()))
@@ -40,6 +44,15 @@ impl Operation {
         let value = op_split[1].parse::<i32>();
         if value.is_ok() {
             Ok(Operation::LoadVal(value.unwrap()))
+        } else {
+            Err(OperationParsingError("Failed to parse Op argument (should be integer)".to_string()))
+        }
+    }
+
+    fn parse_loop_op(op_split: &Vec<&str>) -> Result<Operation, BytecodeError> {
+        let value = op_split[1].parse::<u32>();
+        if value.is_ok() {
+            Ok(Operation::Loop(value.unwrap()))
         } else {
             Err(OperationParsingError("Failed to parse Op argument (should be integer)".to_string()))
         }
