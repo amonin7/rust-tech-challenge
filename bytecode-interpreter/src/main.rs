@@ -18,6 +18,7 @@ fn main() {
         stack: Vec::new(),
         variables: HashMap::new()
     };
+
     let result = interpreter.execute_code();
     if result.is_err() {
         panic!("Failed to process instructions: {:?}", result.unwrap_err())
