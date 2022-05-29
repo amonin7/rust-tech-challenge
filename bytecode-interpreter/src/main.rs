@@ -1,15 +1,8 @@
 use std::collections::HashMap;
 use std::io;
-use crate::bytecode::ByteCode;
-use crate::interpreter::Interpreter;
-use crate::loop_info::LoopInfo;
-
-pub mod bytecode;
-pub mod operation;
-pub mod errors;
-pub mod interpreter;
-pub mod process_result;
-pub mod loop_info;
+use bytecode_interpreter::bytecode::ByteCode;
+use bytecode_interpreter::interpreter::Interpreter;
+use bytecode_interpreter::loop_info::LoopInfo;
 
 fn main() {
 
@@ -20,7 +13,7 @@ fn main() {
         bc,
         stack: Vec::new(),
         variables: HashMap::new(),
-        loop_info: LoopInfo { start_op_index: 0, end_op_index: 0, iterations_num: 0 }
+        loop_info: LoopInfo { start_op_index: 0, end_op_index: 0, iterations_num: 0, has_loop: false }
     };
 
     let result = interpreter.execute_code();

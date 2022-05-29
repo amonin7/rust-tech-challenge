@@ -1,7 +1,7 @@
 use crate::errors::BytecodeError;
 use crate::errors::BytecodeError::OperationParsingError;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Operation {
     LoadVal(i32),
     Loop(u32),
