@@ -1,22 +1,34 @@
 use crate::errors::BytecodeError;
 use crate::errors::BytecodeError::OperationParsingError;
 
+/// Structure represents all possible operation instructions, that are supported by this interpreter
 #[derive(Debug, Clone, PartialEq)]
 pub enum Operation {
+    /// Puts value into the stack
     LoadVal(i32),
+    /// Cycle instructions for fixed amount of iterations
     Loop(u32),
+    /// Puts value into the stack after getting it from variable's dictionary
     ReadVar(String),
+    /// Pops value from the stack and writes it into variable (in dictionary)
     WriteVar(String),
+    /// + operator between 2 numbers in the stack
     Add,
+    /// - operator between 2 numbers in the stack
     Subtract,
+    /// * operator between 2 numbers in the stack
     Multiply,
+    /// / operator between 2 numbers in the stack
     Divide,
+    /// cycle termination operation
     EndLoop,
+    /// execution termination operation
     ReturnValue
 }
 
 impl Operation {
 
+    /// Parses Operation from the given string
     pub fn parse_operation(op: String) -> Result<Operation, BytecodeError> {
         let op_split: Vec<&str> = op.split_whitespace().collect();
         return match op_split.len() {
@@ -40,6 +52,7 @@ impl Operation {
         }
     }
 
+    /// Parses LoadVal operation parameter
     fn parse_load_op(op_split: &Vec<&str>) -> Result<Operation, BytecodeError> {
         let value = op_split[1].parse::<i32>();
         if value.is_ok() {
@@ -49,6 +62,7 @@ impl Operation {
         }
     }
 
+    /// Parses Loop operation parameter
     fn parse_loop_op(op_split: &Vec<&str>) -> Result<Operation, BytecodeError> {
         let value = op_split[1].parse::<u32>();
         if value.is_ok() {

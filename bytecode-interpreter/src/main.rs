@@ -23,6 +23,9 @@ fn main() {
     println!("Result is {}", result.unwrap())
 }
 
+/// Reads the input from console (stdin), \
+/// Parses each operation, \
+/// Puts each operation into ByteCode
 fn read_input(bc: &mut ByteCode) {
     loop {
         let mut input = String::new();

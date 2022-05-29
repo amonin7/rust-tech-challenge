@@ -6,15 +6,26 @@ use crate::operation::Operation;
 use crate::process_result::ProcessResult;
 use crate::loop_info::LoopInfo;
 
+/// Structure represents the ByteCode interpreter
 #[derive(Debug)]
 pub struct Interpreter {
+    /// Bytecode instructions
     pub bc: ByteCode,
+    /// Interpreter's stack of values
     pub stack: Vec<i32>,
+    /// Variables dictionary
+    /// - key - String, variable "name"
+    /// - value - Integer, variable value
     pub variables: HashMap<String, i32>,
+    /// Information about cycle appearance
     pub loop_info: LoopInfo,
 }
 
 impl Interpreter {
+    /// main function, that iterates by the bytecode instructions and executes each one \
+    /// Returns:
+    /// - Error, if some occurred
+    /// - the top value in the stack otherwise
     pub fn execute_code(&mut self) -> Result<i32, BytecodeError> {
         for (i, op) in self.bc.operations.clone().iter().enumerate() {
             let res = self.process_instruction(&op, &i);
@@ -32,6 +43,10 @@ impl Interpreter {
         return Ok(self.stack.pop().unwrap());
     }
 
+    /// Function to process each operation separately \
+    /// Returns:
+    /// - Error, if some occurred
+    /// - the result of the instruction execution process otherwise
     fn process_instruction(&mut self, op: &Operation, op_index: &usize) -> Result<ProcessResult, BytecodeError> {
         match op {
             Operation::LoadVal(val) => self.stack.push(*val),
@@ -48,6 +63,7 @@ impl Interpreter {
         return Ok(ProcessResult::Continue);
     }
 
+    /// Makes all operations needed to, when the loop instruction met
     fn process_start_loop_op(&mut self, op_index: &usize, val: &u32) -> Result<ProcessResult, BytecodeError> {
         if self.loop_info.has_loop {
             return Err(BytecodeError::OperationProcessError("There is already initialized loop".to_string()))
@@ -58,12 +74,17 @@ impl Interpreter {
         return Ok(ProcessResult::Continue);
     }
 
+    /// Makes all operations needed to, when the EndLoop instruction met \
+    /// these are
+    /// - set the last op to execute index
+    /// - execute the loop instructions
     fn process_end_loop_op(&mut self, op_index: &usize) -> Result<ProcessResult, BytecodeError> {
         if !self.loop_info.has_loop {
             return Err(BytecodeError::OperationProcessError("There is no initialized loop yet".to_string()))
         }
 
         self.loop_info.end_op_index = *op_index;
+        self.loop_info.has_loop = false;
         let res = self.execute_loop();
         return match res {
             Ok(_) => Ok(ProcessResult::Continue),
@@ -71,6 +92,8 @@ impl Interpreter {
         }
     }
 
+    /// Pops the value from the stack \
+    /// Adds it into dictionary with the provided key
     fn process_write_op(&mut self, variable: &String) -> Result<ProcessResult, BytecodeError> {
         if self.stack.is_empty() {
             return Err(BytecodeError::OperationProcessError("There is no variable in the stack".to_string()));
@@ -79,6 +102,11 @@ impl Interpreter {
         return Ok(ProcessResult::Continue);
     }
 
+    /// Gets the value from the dictionary by the provided key \
+    /// Puts this value into stack \
+    /// If there is no such variable in the dict - JUST prints the corresponding message \
+    /// **Note**: It was made like so, because the user may make a mistake, while writing the var name. \
+    /// So this gives the possibility to find the read the correct variable.
     fn process_read_op(&mut self, variable: &String) {
         match self.variables.get(variable) {
             Some(value) => self.stack.push(*value),
@@ -86,6 +114,12 @@ impl Interpreter {
         }
     }
 
+    /// Just processes simple arithmetic operation \
+    /// - Pops 2 top values from the stack
+    /// - apply an arithmetic operation to them
+    /// - puts the result into the stack
+    ///
+    /// In case of error - returns the error
     fn process_arithmetic_op<F>(&mut self, apply: F) -> Result<ProcessResult, BytecodeError>
         where F: Fn(i32, i32) -> i32 {
         if self.stack.len() < 2 {
@@ -98,6 +132,7 @@ impl Interpreter {
         return Ok(ProcessResult::Continue)
     }
 
+    /// Basic simple implementation of loop execution
     fn execute_loop(&mut self) -> Result<ProcessResult, BytecodeError> {
         for _ in 0..self.loop_info.iterations_num {
             for i in self.loop_info.start_op_index..self.loop_info.end_op_index {
