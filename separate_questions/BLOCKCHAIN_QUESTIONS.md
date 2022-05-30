@@ -106,3 +106,61 @@ In the Proof-of-Stake model, stakers - the PoS equivalent of miners - lock up fu
 Every time a new block is needed by the network, an algorithm grants a specific staker the opportunity to publish the next block.
 The algorithm selects the staker via lottery, depending on each staker’s percentage of total staked funds. For example, 
 if a single staker controls 30% of all funds staked on a given network, they have a 30% chance of mining the next block.
+
+### PoS vs PoW
+
+Proof-of-Stake was invented to improve upon the perceived downsides Proof-of-Work. 
+Firstly, Proof-of-Stake does not require the immense amount of energy consumption required by Proof-of-Work, 
+because coins are simply locked in a specific smart contract on the blockchain. 
+For this reason, individuals who criticize Bitcoin’s energy consumption prefer Proof-of-Stake.
+
+Proof-of-Stake advocates also claim that PoS is more economically secure than PoW, however, 
+this has been debated back and forth to no conclusion. 
+Additionally, since Bitcoin has never been hacked and there are relatively few decentralized PoS systems,
+claims that PoS is more secure than PoW have remained purely theoretical and not based on any empirical evidence.
+
+### Drawbacks of Proof-of-Work
+
+#### Consumption of Energy
+
+Proof-of-Stake was invented to eliminate the massive energy costs of a Proof-of-Work network.
+On the other hand, we always should think about the value of Bitcoin’s ultimate security.
+No cryptocurrency, fiat currency, or even commodity-based money can match the security and immutability of Bitcoin’s blockchain.
+For high-value transactions, security and reliability are often more important than speed. 
+Thus, Bitcoin’s energy consumption is well worth the cost, as indicated by the strong demand to transact on the Bitcoin blockchain.
+No cryptocurrency which has attempted to replicate Bitcoin and eliminate its energy requirements has established sufficient 
+security and decentralization, precisely because Proof-of-Work converts energy into security.
+
+#### Hardware Requirements
+
+Satisfying the Proof-of-Work requirement necessitates physical computers and intensive computation. 
+To maximize the energy efficiency of this process, miners use specialized hardware rather than normal laptops and general
+purpose computers, which are not capable of anything other than Bitcoin mining.
+
+The fact that this hardware has only one use protects Bitcoin by discouraging attackers.
+If an attacker wanted to execute a 51% attack on the network, they would have to purchase millions if not billions of 
+dollars worth of ASICs, only to render them useless by destroying the Bitcoin network.
+
+### Drawbacks of Proof-of-Stake
+
+#### Problems with Governance
+
+Proof-of-Stake systems grant control of the network to owners of the token. 
+Those with large amounts of the token can influence the rules of the network. 
+They are also able to accumulate more of the token simply by staking. 
+This positive feedback loop can lead to centralization of staked funds in the hands of exchanges and large institutions who custody user funds.
+
+This is not the case for Proof-of-Work systems. 
+Bitcoin’s ruleset is controlled by nodes and miners, and no power over the network is given to bitcoin owners.
+
+#### Vulnerability to Attack
+
+Proof-of-Stake systems are vulnerable to centralization and capture because control of the network is determined solely by capital,
+which is far more centralized than labor and cheap energy. 
+In a PoS network worth $100 billion where 10% of tokens are staked, the $100 billion network can be taken over by any party 
+able to allocate $10 billion. All the attacker would have to do is send $10 billion in tokens to a staking contract.
+
+In a Proof-of-Work network, capital, labor, and efficient allocation of both are required to execute an attack on the network.
+Attacking a network with $10 billion of security would require purchasing ASICs, acquiring space and energy contracts to mine 
+at a larger scale than the entire network, and acquiring and deploying the labor to execute the attack. 
+If such an attack were underway, the entire network would likely be made aware ahead of time by the immense demand for ASICs and electricity.
